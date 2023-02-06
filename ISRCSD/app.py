@@ -38,6 +38,7 @@ def Index():
     datos = obtener_datos()
     carreras = obtener_carreras()
     docentes = obtener_docentes()
+    print(docentes)
 
     if "usuario" in session:
         return render_template("pag_principal.html", datos=datos, carreras=carreras, docentes=docentes)
@@ -62,18 +63,16 @@ def añadir():
         horario_V_in = request.form["formHorario_v_in"]
         horario_V_out = request.form["formHorario_v_out"]
         horario_dias = ""
-        contenido_programatico = ""
-        asistencia_semanal = ""
-        contenido_programatico1            = request.form['formcontenidoProgramatico']
-        asistencia_semanal0            = request.form['formasistenciaSemanal']
+        contenido_programatico = request.form['formcontenidoProgramatico']
+        asistencia_semanal = request.form['formasistenciaSemanal'] 
 
         for i in horario:
             if i != "L" and i != horario[0]:
                 horario_dias+= "-"
             horario_dias += i
 
-        filas = "id_docente,unidad,carrera,dias"
-        formato = "%s,%s,%s,%s,%s"
+        filas = "id_docente,unidad,carrera,dias,contenidoprogramatico,asistenciasemanal"
+        formato = "%s,%s,%s,%s,%s,%s"
         valores = [docente, nombre, carrera, horario_dias, contenido_programatico, asistencia_semanal]
 
         if "L" in horario_dias:
@@ -96,14 +95,6 @@ def añadir():
             filas += ",horario_v_in,horario_v_out"
             formato += ",%s,%s"
             valores.extend([horario_V_in, horario_V_out])
-        if "1" in contenido_programatico:
-            contenido_programatico1 = "si"
-        else:
-            contenido_programatico1 = "no"
-        if "1" in asistencia_semanal:
-            asistencia_semanal0 = "si"
-        else:
-            asistencia_semanal0 = "no"
 
         connection = pymysql.connect(host="localhost", user="root", passwd="", db="srcededb")
         cursor = connection.cursor()
