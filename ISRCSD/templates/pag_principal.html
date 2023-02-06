@@ -1,0 +1,415 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+<div class="separarwnav izquierda">
+    <div class="separarwnav backgizquierdo"></div>
+    <div class="list-group">
+        <button id="butn1" class="list-group-item list-group-item-action list-group-item-primary active" onclick="mostrartabla(1);">Visualizar registro académico</button>
+        <button id="butn2" class="list-group-item list-group-item-action list-group-item-primary" onclick="mostrartabla(2);">Visualizar docentes</button>
+        <button id="butn3" class="list-group-item list-group-item-action list-group-item-primary" onclick="mostrartabla(3);">Visualizar carreras</button>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    <span>{{ message }}</span>
+                    <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+<div class="separarwnav derechafill">
+        <div class=".col-md-6 .offset-md-3" id="tabla1" readonly style="display:block">
+            <div class="card card-body">
+                <h1>Visualizando tabla de Registro Académico <button class="btn btn-outline-success" data-toggle="modal" data-target="#modalUnidad">+</button></h1>
+                <table class="table table-striped table-bordered bg-white table-sm">
+                    <thead>
+                        <tr>
+                            <td>Docente</td>
+                            <td>Unidad</td>
+                            <td>Carrera</td>
+                            <td>Días</td>
+                            <td>Contenido Programatico</td>
+                            <td>Asistencia Semanal</td>
+                            <td>Acciones</td>
+                        </tr>     
+                    </thead>
+
+                    <tbody>
+                        {% for dato in datos %}
+                        <tr>
+                            <td>{{ dato.16 }} {{ dato.17 }}</td>
+                            <td>{{ dato.2 }}</td>
+                            <td>{{ dato.3 }}</td>
+                            <td>{{ dato.4 }}</td>
+                            <td>{{ dato.5 }}</td>
+                            <td>{{ dato.6 }}</td>
+
+                            <td>
+                                <a href="/" class="btn2 btn-secondary" data-toggle="modal" data-target="#modalVerUnidad{{dato.0}}">Visualizar</a>
+                                <a href="/reporte?unidad={{dato.0}}" class="btn2 btn-info">Reporte</a>
+                                <a href="/eliminar?unidad={{dato.0}}" class="btn2 btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class=".col-md-6 .offset-md-3" id="tabla2" readonly style="display:none">
+            <div class="card card-body">
+                <h1>Visualizando tabla de docentes <button class="btn btn-outline-success" data-toggle="modal" data-target="#modalDocente">+</button></h1>
+                <table class="table table-striped table-bordered bg-white table-sm">
+                    <thead>
+                        <tr>
+                            <td>Serial</td>
+                            <td>Nombre</td>
+                            <td>Apellido</td>
+                            <td>Cedula</td>
+                            <td>Acciones</td>
+                        </tr>     
+                    </thead>
+
+                    <tbody>
+                        {% for docente in docentes %}
+                        <tr>
+                            <td>{{ docente.0 }}</td>
+                            <td>{{ docente.1 }}</td>
+                            <td>{{ docente.2 }}</td>
+                            <td>{{ docente.3 }}</td>
+                            
+                            <td>
+                                <a href="/" class="btn2 btn-secondary" data-toggle="modal" data-target="#modalVerDocente{{docente.3}}">Asignaciones</a>
+                                <a href="/reporte?docente={{docente.0}}" class="btn2 btn-info">Reporte</a>
+                                <a href="/eliminar?docente={{docente.0}}" class="btn2 btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class=".col-md-6 .offset-md-3" id="tabla3" readonly style="display:none">
+            <div class="card card-body">
+                <h1>Visualizando tabla de carreras <button class="btn btn-outline-success" data-toggle="modal" data-target="#modalCarrera">+</button></h1>
+                <table class="table table-striped table-bordered bg-white table-sm">
+                    <thead>
+                        <tr>
+                            <td>Serial</td>
+                            <td>Carrera</td>
+                            <td>Acciones</td>
+                        </tr>     
+                    </thead>
+
+                    <tbody>
+                        {% for carrera in carreras %}
+                        <tr>
+                            <td>{{ carrera.0 }}</td>
+                            <td>{{ carrera.1 }}</td>
+                            
+                            <td>
+                                <a href="/" class="btn2 btn-secondary" data-toggle="modal" data-target="#modalVerCarrera{{carrera.0}}">Unidades</a>
+                                <a href="/reporte?carrera={{carrera.1}}" class="btn2 btn-info">Reporte</a>
+                                <a href="/eliminar?carrera={{carrera.1}}" class="btn2 btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>        
+</div>
+
+<!--MODALES-->
+
+<div class="modal fade" id="modalUnidad" tabindex="-1" aria-labelledby="modalUnidadLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalUnidadLabel">Añadir unidad al sistema</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="/añadir?unidad" method="POST" onsubmit="return validar()">
+                <div class="modal-body">
+                    <select class="form-select" name="formSelecDocente" required>
+                        <option value="" selected>Seleccionar docente</option>
+                        {% for docente in docentes %}
+                            <option value="{{ docente.0 }}">{{ docente.1 }} {{ docente.2 }} [Cedula: {{ docente.3 }}]</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <input name="formNombre" type="text" class="form-control" placeholder="Introducir nombre de la unidad">
+                    <br>                    
+                    <select class="form-select" name="formSelectCarrera" required>
+                        <option value="" selected>Seleccionar carrera</option>
+                        {% for carrera in carreras %}
+                            <option value="{{ carrera.1 }}">{{ carrera.1 }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <div class="card card-body">
+                        <div class="checkboxes">Elige el horario a cumplir</div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="seleccionHorario" onChange="check1(this);" id="checkDay1" value="L">
+                            <label class="form-check-label" for="checkDay1">L</label>
+                            <input type="time" name="formHorario_l_in" id="inputcheck1in" style="display:none">-><input type="time" name="formHorario_l_out" id="inputcheck1out" style="display:none">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="seleccionHorario" onChange="check2(this);" id="checkDay2" value="MA">
+                            <label class="form-check-label" for="checkDay2">MA</label>
+                            <input type="time" name="formHorario_ma_in" id="inputcheck2in" style="display:none">-><input type="time" name="formHorario_ma_out" id="inputcheck2out" style="display:none">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="seleccionHorario" onChange="check3(this);" id="checkDay3" value="MI">
+                            <label class="form-check-label" for="checkDay3">MI</label>
+                            <input type="time" name="formHorario_mi_in" id="inputcheck3in" style="display:none">-><input type="time" name="formHorario_mi_out" id="inputcheck3out" style="display:none">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="seleccionHorario" onChange="check4(this);" id="checkDay4" value="J">
+                            <label class="form-check-label" for="checkDay4">J</label>
+                            <input type="time" name="formHorario_j_in" id="inputcheck4in" style="display:none">-><input type="time" name="formHorario_j_out" id="inputcheck4out" style="display:none">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="seleccionHorario" onChange="check5(this);" id="checkDay5" value="V">
+                            <label class="form-check-label" for="checkDay5">V</label>
+                            <input type="time" name="formHorario_v_in" id="inputcheck5in" style="display:none">-><input type="time" name="formHorario_v_out" id="inputcheck5out" style="display:none">
+                        </div>
+                        </div>
+                        <div class="checkboxes">¿Entrego el Contenido Programatico?</div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="formcontenidoProgramatico" value="1" checked>
+                            <label class="form-check-label" for="formcontenidoProgramatico">Si</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="formcontenidoProgramatico" value="0">
+                            <label class="form-check-label" for="formcontenidoProgramatico">No</label>
+                        </div>
+                        </div>
+                        <div class="checkboxes">¿Entrego la Asistencia Semanal?</div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="formasistenciaSemanal" value="1" checked>
+                            <label class="form-check-label" for="formasistenciaSemanal">Si</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="formasistenciaSemanal" value="0">
+                            <label class="form-check-label" for="formasistenciaSemanal">No</label>
+                        </div>
+                        </div>
+                    </div>    
+                     
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>	
+
+<div class="modal fade" id="modalDocente" tabindex="-1" aria-labelledby="modalDocenteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDocenteLabel">Añadir docente al sistema</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="/añadir?docente" method="POST">
+                <div class="modal-body">
+                    <input name="formNombreDocente" type="text" class="form-control" placeholder="Nombre del docente">
+                    <input name="formApellidoDocente" type="text" class="form-control" placeholder="Apellido del docente">
+                    <input name="formCedulaDocente" type="number" class="form-control" placeholder="Cedula">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalCarrera" tabindex="-1" aria-labelledby="modalCarreraLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCarreraLabel">Añadir carrera al sistema</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="/añadir?carrera" method="POST">
+                <div class="modal-body">
+                    <input name="formTituloCarrera" type="text" class="form-control" placeholder="Titulo de la carrera">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% for dato in datos %}
+<div class="modal fade" id="modalVerUnidad{{dato.0}}" tabindex="-1" aria-labelledby="modalVerUnidadLabel{{dato.0}}" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalVerUnidadLabel{{dato.0}}">Visualizando unidad (ID: {{dato.0}})</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div class="modal-body">
+                    <table class="table table-striped table-bordered bg-white table-sm">
+                        <thead>
+                            <tr>
+                                <td>Docente</td>
+                                <td>Unidad</td>
+                                <td>Carrera</td>
+                                <td>Lunes</td>
+                                <td>Martes</td>
+                                <td>Miercoles</td>
+                                <td>Jueves</td>
+                                <td>Viernes</td>
+                            </tr>     
+                        </thead>
+    
+                        <tbody>
+                            <td>{{dato.16}} {{dato.17}} [{{dato.18}}]</td>
+                            <td>{{dato.2}}</td>
+                            <td>{{dato.3}}</td>
+                            <td>{{dato.5}}-{{dato.6}}</td>
+                            <td>{{dato.7}}-{{dato.8}}</td>
+                            <td>{{dato.9}}-{{dato.10}}</td>
+                            <td>{{dato.11}}-{{dato.12}}</td>
+                            <td>{{dato.13}}-{{dato.14}}</td>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% for carrera in carreras %}
+<div class="modal fade" id="modalVerCarrera{{carrera.0}}" tabindex="-1" aria-labelledby="modalVerCarreraLabel{{carrera.0}}" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalVerCarreraLabel{{carrera.0}}">Visualizando carrera (ID: {{carrera.1}})</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div class="modal-body">
+                    <table class="table table-striped table-bordered bg-white table-sm">
+                        <thead>
+                            <tr>
+                                <td>Unidad</td>
+                                <td>Docente</td>
+                                <td>Dias</td>
+                                <td>Acciones</td>
+                            </tr>     
+                        </thead>
+    
+                        <tbody>
+                            {% for dato in datos %}
+                                {% if dato.3 == carrera.1 %}
+                                <tr>
+                                    <td>{{ dato.2 }}</td>
+                                    <td>{{ dato.16 }} {{dato.17}} [{{dato.18}}]</td>
+                                    <td>{{ dato.4 }}</td>
+        
+                                    <td>
+                                        <a href="/" class="btn2 btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#modalVerUnidad{{dato.0}}">Visualizar</a>
+                                        <a href="/" class="btn2 btn-info">Reporte</a>
+                                        <a href="/eliminar?unidad={{dato.0}}" class="btn2 btn-danger">Eliminar</a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% for docente in docentes %}
+<div class="modal fade" id="modalVerDocente{{docente.3}}" tabindex="-1" aria-labelledby="modalVerDocenteLabel{{docente.3}}" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalVerDocenteLabel{{docente.3}}">Visualizando asignaciones del docente CID N° {{docente.3}}</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div class="modal-body">
+                    <table class="table table-striped table-bordered bg-white table-sm">
+                        <thead>
+                            <tr>
+                                <td>Unidad</td>
+                                <td>Lunes</td>
+                                <td>Martes</td>
+                                <td>Miercoles</td>
+                                <td>Jueves</td>
+                                <td>Viernes</td>
+                                <td>Acciones</td>
+                            </tr>     
+                        </thead>
+    
+                        <tbody>
+                            {% for dato in datos %}
+                                {% if dato.1 == docente.0 %}
+                                <tr>
+                                    <td>{{ dato.2 }}</td>
+                                    <td>{{dato.5}}-{{dato.6}}</td>
+                                    <td>{{dato.7}}-{{dato.8}}</td>
+                                    <td>{{dato.9}}-{{dato.10}}</td>
+                                    <td>{{dato.11}}-{{dato.12}}</td>
+                                    <td>{{dato.13}}-{{dato.14}}</td>
+        
+                                    <td>
+                                        <a href="/" class="btn2 btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#modalVerUnidad{{dato.0}}">Visualizar</a>
+                                        <a href="/" class="btn2 btn-info">Reporte</a>
+                                        <a href="/eliminar?unidad={{dato.0}}" class="btn2 btn-danger">Eliminar</a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

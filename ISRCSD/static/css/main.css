@@ -1,0 +1,87 @@
+body {
+  background-image: url("/static/img/background.jpg");
+  background-size:cover
+
+}
+
+.center {
+  position: relative;
+  top: 50px;
+}
+
+.navbar-text{
+  float: none;
+  text-align: center;
+}
+
+.separar {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  top: 0;
+  overflow-x: hidden;
+}
+
+.separarwnav {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  overflow-x: hidden;
+  top: 56px;
+}
+
+.izquierda {
+  width: 20%;
+  left: 0;
+  z-index: 1;
+}
+
+.backgizquierdo {
+  width: 20%;
+  left: 0;
+  background-color: #FBAB7E;
+  background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+  opacity: 80%;
+  z-index: 0;
+}
+
+.derecha {
+  width: 20%;
+  right: 0;
+  z-index: 1;
+}
+
+.derechafill {
+  width: 80%;
+  right: 0;
+  z-index: 1;
+}
+
+.backgderecho {
+  width: 20%;
+  right: 0;
+  background-color: #FBAB7E;
+  background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+  opacity: 80%;
+  z-index: 0;
+}
+
+.centrado {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+
+  font-family: "Times New Roman", Times, serif;
+}
+
+.centrado img {
+  width: 150px;
+  border-radius: 50%;
+}
+
+td {
+  text-align: center;
+  vertical-align: middle;
+}

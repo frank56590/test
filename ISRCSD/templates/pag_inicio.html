@@ -1,0 +1,21 @@
+{% extends "layout_in.html"%}
+{% block body %}
+
+<div class="separar derecha">
+    <div class="separar backgderecho"></div>
+ 
+    <div class="centrado">
+        <form action="/entrar" method="POST" >
+            <img src="../static/img/logo_icon.png">
+            <br>
+            <br>
+            <input name="formUser" placeholder="Usuario" class="form-control" maxlength="16" required>
+            <br>
+            <input name="formPw" placeholder="Contraseña" class="form-control" type="password" maxlength="16" required>
+            <br>
+            <button type="submit" name="submit_button" value="1" class="btn btn-success btn-block">Confirmar</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
