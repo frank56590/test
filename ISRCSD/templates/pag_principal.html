@@ -43,12 +43,16 @@
                     <tbody>
                         {% for dato in datos %}
                         <tr>
-                            <td>{{ dato.16 }} {{ dato.17 }}</td>
+                            {% for docente in docentes %}
+                                {% if docente.0 == dato.1 %}
+                                    <td>{{ docente.1 }} {{docente.2}}</td>
+                                {% endif %}
+                            {% endfor %}
                             <td>{{ dato.2 }}</td>
                             <td>{{ dato.3 }}</td>
                             <td>{{ dato.4 }}</td>
-                            <td>{{ dato.5 }}</td>
-                            <td>{{ dato.6 }}</td>
+                            <td>{{ dato.15 }}</td>
+                            <td>{{ dato.16 }}</td>
 
                             <td>
                                 <a href="/" class="btn2 btn-secondary" data-toggle="modal" data-target="#modalVerUnidad{{dato.0}}">Visualizar</a>
@@ -185,21 +189,21 @@
                         </div>
                         <div class="checkboxes">¿Entrego el Contenido Programatico?</div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="formcontenidoProgramatico" value="1" checked>
+                            <input class="form-check-input" type="radio" name="formcontenidoProgramatico" value="Si" checked>
                             <label class="form-check-label" for="formcontenidoProgramatico">Si</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="formcontenidoProgramatico" value="0">
+                            <input class="form-check-input" type="radio" name="formcontenidoProgramatico" value="No">
                             <label class="form-check-label" for="formcontenidoProgramatico">No</label>
                         </div>
                         </div>
                         <div class="checkboxes">¿Entrego la Asistencia Semanal?</div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="formasistenciaSemanal" value="1" checked>
+                            <input class="form-check-input" type="radio" name="formasistenciaSemanal" value="Si" checked>
                             <label class="form-check-label" for="formasistenciaSemanal">Si</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="formasistenciaSemanal" value="0">
+                            <input class="form-check-input" type="radio" name="formasistenciaSemanal" value="No">
                             <label class="form-check-label" for="formasistenciaSemanal">No</label>
                         </div>
                         </div>
