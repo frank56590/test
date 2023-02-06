@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2022-03-17 11:32:49
+Date: 2023-02-06 19:11:44
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -97,22 +97,25 @@ CREATE TABLE `unidades` (
   `horario_j_out` varchar(7) DEFAULT '--',
   `horario_v_in` varchar(7) DEFAULT '--',
   `horario_v_out` varchar(7) DEFAULT '--',
+  `contenidoprogramatico` varchar(7) DEFAULT '',
+  `asistenciasemanal` varchar(7) DEFAULT '',
   PRIMARY KEY (`id`,`id_docente`),
   KEY `relacion_cerrara_unidad` (`carrera`),
   KEY `relacion_docente_unidad` (`id_docente`),
   CONSTRAINT `relacion_cerrara_unidad` FOREIGN KEY (`carrera`) REFERENCES `carreras` (`titulo`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `relacion_docente_unidad` FOREIGN KEY (`id_docente`) REFERENCES `docentes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of unidades
 -- ----------------------------
-INSERT INTO `unidades` VALUES ('7', '1', 'Warao', 'Informatica', 'V', '--', '--', '--', '--', '--', '--', '--', '--', '10:30', '00:30');
-INSERT INTO `unidades` VALUES ('8', '1', 'Redes', 'Informatica', 'J', '--', '--', '--', '--', '--', '--', '10:30', '00:30', '--', '--');
-INSERT INTO `unidades` VALUES ('9', '1', 'Programacion I', 'Informatica', 'MI-V', '--', '--', '--', '--', '10:30', '00:30', '--', '--', '22:30', '13:30');
-INSERT INTO `unidades` VALUES ('11', '5', 'Prueba', 'Fisioterapia', 'L', '21:03', '21:02', '--', '--', '--', '--', '--', '--', '--', '--');
-INSERT INTO `unidades` VALUES ('12', '5', 'Warao', 'Distribucion de alimentos', 'MI', '--', '--', '--', '--', '10:20', '13:00', '--', '--', '--', '--');
-INSERT INTO `unidades` VALUES ('13', '5', 'Warao', 'Agroalimentaria', 'MA', '--', '--', '22:49', '21:54', '--', '--', '--', '--', '--', '--');
-INSERT INTO `unidades` VALUES ('14', '1', 'Introduccion a las tips', 'Informatica', 'MA', '--', '--', '01:28', '01:25', '--', '--', '--', '--', '--', '--');
-INSERT INTO `unidades` VALUES ('15', '1', 'Proyecto Sociotecnologico ', 'Informatica', 'MA', '--', '--', '10:30', '12:00', '--', '--', '--', '--', '--', '--');
-INSERT INTO `unidades` VALUES ('17', '1', 'Prueba final', 'Agroalimentaria', 'MA-J', '--', '--', '11:27', '11:32', '--', '--', '04:28', '11:33', '--', '--');
+INSERT INTO `unidades` VALUES ('7', '1', 'Warao', 'Informatica', 'V', '--', '--', '--', '--', '--', '--', '--', '--', '10:30', '00:30', null, null);
+INSERT INTO `unidades` VALUES ('8', '1', 'Redes', 'Informatica', 'J', '--', '--', '--', '--', '--', '--', '10:30', '00:30', '--', '--', null, null);
+INSERT INTO `unidades` VALUES ('9', '1', 'Programacion I', 'Informatica', 'MI-V', '--', '--', '--', '--', '10:30', '00:30', '--', '--', '22:30', '13:30', null, null);
+INSERT INTO `unidades` VALUES ('11', '5', 'Prueba', 'Fisioterapia', 'L', '21:03', '21:02', '--', '--', '--', '--', '--', '--', '--', '--', null, null);
+INSERT INTO `unidades` VALUES ('12', '5', 'Warao', 'Distribucion de alimentos', 'MI', '--', '--', '--', '--', '10:20', '13:00', '--', '--', '--', '--', null, null);
+INSERT INTO `unidades` VALUES ('13', '5', 'Warao', 'Agroalimentaria', 'MA', '--', '--', '22:49', '21:54', '--', '--', '--', '--', '--', '--', null, null);
+INSERT INTO `unidades` VALUES ('14', '1', 'Introduccion a las tips', 'Informatica', 'MA', '--', '--', '01:28', '01:25', '--', '--', '--', '--', '--', '--', null, null);
+INSERT INTO `unidades` VALUES ('15', '1', 'Proyecto Sociotecnologico ', 'Informatica', 'MA', '--', '--', '10:30', '12:00', '--', '--', '--', '--', '--', '--', null, null);
+INSERT INTO `unidades` VALUES ('17', '1', 'Prueba final', 'Agroalimentaria', 'MA-J', '--', '--', '11:27', '11:32', '--', '--', '04:28', '11:33', '--', '--', null, null);
+INSERT INTO `unidades` VALUES ('18', '1', 'asd', 'Administracion', '', '--', '--', '--', '--', '--', '--', '--', '--', '--', '--', 'Si', 'Si');
